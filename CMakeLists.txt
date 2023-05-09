@@ -15,8 +15,10 @@ find_package(GTest CONFIG REQUIRED)
 
 option(TESTS "Specifies if tests are run" OFF)
 set(SOURCE_FILES
-    message.h message.cpp ISerialize.h
-    serializer.h serializer.cpp)
+    message.h message.cpp ISerialize.h ideserialize.h
+    serializer.h serializer.cpp
+    deserializer.h deserializer.cpp
+)
 
 if (TESTS)
     set(EXECUTABLE tests)
