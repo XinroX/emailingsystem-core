@@ -13,7 +13,8 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
 add_executable(emailingsystem-core
-  main.cpp
+    main.cpp
+    message.h message.cpp
 )
 target_link_libraries(emailingsystem-core Qt${QT_VERSION_MAJOR}::Core)
 
