@@ -12,3 +12,9 @@ TEST(MessageTest, MessageCreatedWithEmptyTitle) {
 
     ASSERT_TRUE(message.getTitle().isNull());
 }
+
+TEST(MessageTest, MessageCreatedWithValidTitle) {
+    core::Message message{"Test", "Test", "Test", "Test"};
+
+    ASSERT_FALSE(message.getTitle().isNull());
+}
