@@ -13,9 +13,10 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 find_package(GTest CONFIG REQUIRED)
 
-option(TESTS "Specifies if tests are run" ON)
+option(TESTS "Specifies if tests are run" OFF)
 set(SOURCE_FILES
-    message.h message.cpp)
+    message.h message.cpp ISerialize.h
+    serializer.h serializer.cpp)
 
 if (TESTS)
     set(EXECUTABLE tests)
