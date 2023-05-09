@@ -11,12 +11,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
+find_package(GTest CONFIG REQUIRED)
 
-add_executable(emailingsystem-core
-    main.cpp
-    message.h message.cpp
-)
-target_link_libraries(emailingsystem-core Qt${QT_VERSION_MAJOR}::Core)
+option(TESTS "Specifies if tests are run" ON)
+set(SOURCE_FILES
+    message.h message.cpp)
 
-install(TARGETS emailingsystem-core
+if (TESTS)
+    set(EXECUTABLE tests)
+    enable_testing()
+    add_executable(${EXECUTABLE} ${SOURCE_FILES} tests.cpp)
+else()
+    set(EXECUTABLE emailingsystem-core)
+    add_executable(${EXECUTABLE} main.cpp ${SOURCE_FILES})
+endif()
+target_link_libraries(${EXECUTABLE} Qt${QT_VERSION_MAJOR}::Core)
+target_link_libraries(${EXECUTABLE} GTest::gtest_main)
+install(TARGETS ${EXECUTABLE}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+
+
