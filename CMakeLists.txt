@@ -20,18 +20,11 @@ set(SOURCE_FILES
     deserializer.h deserializer.cpp
 )
 
-if (TESTS)
-    set(EXECUTABLE tests)
-    enable_testing()
-    add_executable(${EXECUTABLE} ${SOURCE_FILES} tests.cpp)
-else()
-    set(EXECUTABLE core)
-    add_library(${EXECUTABLE} SHARED ${SOURCE_FILES})
-    target_include_directories(${EXECUTABLE} PUBLIC "./")
-    #add_executable(${EXECUTABLE} main.cpp ${SOURCE_FILES})
-endif()
+set(EXECUTABLE core)
+add_library(${EXECUTABLE} SHARED ${SOURCE_FILES})
+add_executable(testRunner ${SOURCE_FILES} tests.cpp)
+target_link_libraries(testRunner Qt${QT_VERSION_MAJOR}::Core GTest::gtest_main)
 target_link_libraries(${EXECUTABLE} Qt${QT_VERSION_MAJOR}::Core)
-target_link_libraries(${EXECUTABLE} GTest::gtest_main)
 install(TARGETS ${EXECUTABLE}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
