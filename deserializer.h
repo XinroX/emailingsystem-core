@@ -13,7 +13,7 @@ class Deserializer : public QObject, public core::IDeserialize
     Q_OBJECT
 public:
     explicit Deserializer(QObject *parent = nullptr);
-    virtual core::Message* Deserialize(const QByteArray& message) const override;
+    virtual core::Message Deserialize(const QByteArray& message) const override;
 
 signals:
 

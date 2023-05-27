@@ -1,16 +1,12 @@
 #include "message.h"
+#include "messagebuilder.h"
 
 namespace core {
 
 
-Message::Message(const QString &title, const QString &sender, const QString &receiver,
-                       const QString &content, QObject *parent)
-    : mSender{sender}, mReceiver{receiver}, mContent{content}, QObject(parent)
-{
-    if (title.isNull() || title.isEmpty())
-        mTitle = QString();
-    else
-        mTitle = title;
+
+QDateTime Message::getTimestamp() const {
+    return mTimestamp;
 }
 
 QString Message::getTitle() const {
@@ -29,5 +25,11 @@ QString Message::getContent() const {
     return mContent;
 }
 
+MessageBuilder Message::Create(const QDateTime& timestamp) {
+    MessageBuilder builder{timestamp};
+    return std::move(builder);
 }
+
+
+} // core
 

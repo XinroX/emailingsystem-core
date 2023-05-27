@@ -8,7 +8,7 @@ namespace core {
 
 class ISerialize {
 public:
-    virtual QByteArray Serialize(Message* message) const = 0;
+    virtual QByteArray Serialize(const Message& message) const = 0;
     virtual ~ISerialize(){}
 };
 

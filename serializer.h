@@ -13,7 +13,7 @@ class Serializer : public QObject, public core::ISerialize
 public:
     explicit Serializer(QObject *parent = nullptr);
 
-    virtual QByteArray Serialize(core::Message* message) const override;
+    virtual QByteArray Serialize(const core::Message& message) const override;
 
 signals:
 

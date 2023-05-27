@@ -2,22 +2,25 @@
 #define MESSAGE_H
 
 #include <QObject>
+#include <QDateTime>
+
 namespace core {
-
-class Message : public QObject
+class MessageBuilder;
+class Message
 {
-    Q_OBJECT
 public:
-    explicit Message(const QString& title, const QString& sender, const QString& receiver,
-                     const QString& content, QObject *parent = nullptr);
 
+    static MessageBuilder Create(const QDateTime& timestamp);
+
+    QDateTime getTimestamp() const;
     QString getTitle() const;
     QString getSender() const;
     QString getReceiver() const;
     QString getContent() const;
-signals:
 
 private:
+    friend class MessageBuilder;
+    QDateTime mTimestamp;
     QString mTitle;
     QString mSender;
     QString mReceiver;

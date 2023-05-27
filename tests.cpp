@@ -2,61 +2,46 @@
 #include "message.h"
 #include "serializer.h"
 #include "deserializer.h"
-#include <iostream>
+#include "messagebuilder.h"
+#include <QDebug>
 
-class MessageFormatTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        messageBefore = new core::Message{"Message Title", "Message Sender", "Message Receiver", "Message Content"};
-        serializer = new Serializer;
-        deserializer = new Deserializer;
-    }
-
-    void TearDown() override {
-        delete messageBefore;
-        if (messageAfter != nullptr) {
-            delete messageAfter;
-            messageAfter = nullptr;
-        }
-        delete serializer;
-        delete deserializer;
-    }
-    core::ISerialize* serializer = nullptr;
-    core::IDeserialize* deserializer = nullptr;
-    core::Message* messageBefore = nullptr;
-    core::Message* messageAfter = nullptr;
-};
 
 TEST(MessageTest, MessageCreatedWithNullTitle) {
-    core::Message message{QString(), "Test", "Test", "Test"};
+    core::Message message = core::Message::Create(QDateTime::currentDateTime())
+                                .from("Test").to("Test").titled(QString()).withContent("Test");
 
     ASSERT_TRUE(message.getTitle().isNull());
 }
 
 TEST(MessageTest, MessageCreatedWithEmptyTitle) {
-    core::Message message{"", "Test", "Test", "Test"};
+    core::Message message = core::Message::Create(QDateTime::currentDateTime())
+                                .from("Test").to("Test").titled("").withContent("Test");
 
     ASSERT_TRUE(message.getTitle().isNull());
 }
 
 TEST(MessageTest, MessageCreatedWithValidTitle) {
-    core::Message message{"Test", "Test", "Test", "Test"};
+    core::Message message = core::Message::Create(QDateTime::currentDateTime())
+                                .from("Test").to("Test").titled("Test").withContent("Test");
 
     ASSERT_FALSE(message.getTitle().isNull());
 }
 
-TEST_F(MessageFormatTest, MessageDataTest) {
-    EXPECT_EQ(messageBefore->getTitle(), "Message Title");
-    EXPECT_EQ(messageBefore->getSender(), "Message Sender");
-    EXPECT_EQ(messageBefore->getReceiver(), "Message Receiver");
-    EXPECT_EQ(messageBefore->getContent(), "Message Content");
-}
+TEST(MessageFormatTest, SerializationTest) {
+    QDateTime timestamp = QDateTime::currentDateTime();
+    core::Message messageBefore = core::Message::Create(timestamp)
+                                      .from("Message Sender").to("Message Receiver")
+                                      .titled("Message Title").withContent("Message Content");
 
-TEST_F(MessageFormatTest, SerializeTest) {
+
+    core::ISerialize* serializer = new Serializer;
     QByteArray data = serializer->Serialize(messageBefore);
-    messageAfter = deserializer->Deserialize(data);
-    EXPECT_EQ(messageBefore->getTitle(), messageAfter->getTitle());
-    EXPECT_EQ(messageBefore->getSender(), messageAfter->getSender());
-    EXPECT_EQ(messageBefore->getReceiver(), messageAfter->getReceiver());
-    EXPECT_EQ(messageBefore->getContent(), messageAfter->getContent());
+    core::IDeserialize* deserializer = new Deserializer;
+    core::Message messageAfter = deserializer->Deserialize(data);
+
+    EXPECT_EQ(messageAfter.getTimestamp().toString(Qt::ISODate), messageBefore.getTimestamp().toString(Qt::ISODate));
+    EXPECT_EQ(messageAfter.getSender(), messageBefore.getSender());
+    EXPECT_EQ(messageAfter.getReceiver(), messageBefore.getReceiver());
+    EXPECT_EQ(messageAfter.getTitle(), messageBefore.getTitle());
+    EXPECT_EQ(messageAfter.getContent(), messageBefore.getContent());
 }

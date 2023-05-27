@@ -18,6 +18,7 @@ set(SOURCE_FILES
     message.h message.cpp ISerialize.h ideserialize.h
     serializer.h serializer.cpp
     deserializer.h deserializer.cpp
+    messagebuilder.h messagebuilder.cpp
 )
 
 set(EXECUTABLE core)
